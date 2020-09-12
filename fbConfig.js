@@ -22,6 +22,8 @@ admin.initializeApp({
   });
 
   const db = admin.database();
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 
-  module.exports = {firebase, admin}
+  module.exports = {firebase, admin, provider}

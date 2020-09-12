@@ -5,7 +5,7 @@ var cors = require('cors')
 var knex = require('knex')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const { firebase, admin } = require("./fbConfig")
+const { firebase, admin, provider } = require("./fbConfig")
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,6 +17,7 @@ var db = knex({
     client: 'pg',
     version: '7.2',
     connection: {
+
         host: '127.0.0.1',
         user: 'bahar',
         password: '',
@@ -48,6 +49,43 @@ app.post('/login-page', (req, res) => {
             res.status(400).json("Unsuccesful registration. error: " + error)
         });
 })
+
+// app.post('/signinwithGoogle', (req, res) =>{
+//     firebase.auth().signInWithPopup(provider).then(function(result) {
+//         // This gives you a Google Access Token. You can use it to access the Google API.
+//         var token = result.credential.accessToken;
+//         // Build Firebase credential with the Google ID token.
+//         var id_token = googleUser.getAuthResponse().id_token
+//         var credential = firebase.auth.GoogleAuthProvider.credential(id_token);
+
+// // Sign in with credential from the Google user.
+// firebase.auth().signInWithCredential(credential).catch(function(error) {
+//   // Handle Errors here.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   // The email of the user's account used.
+//   var email = error.email;
+//   // The firebase.auth.AuthCredential type that was used.
+//   var credential = error.credential;
+//   // ...
+// });
+//         // The signed-in user info.
+//         var user = result.user;
+//         res.json({"user": user, "token":token})
+//         // ...
+//       })
+//       .catch(error =>{
+//         // Handle Errors here.
+//         // var errorCode = error.code;
+//         // var errorMessage = error.message;
+//         // The email of the user's account used.
+//         // var email = error.email;
+//         // The firebase.auth.AuthCredential type that was used.
+//         // var credential = error.credential;
+//         // ...
+//         res.status(400).json(error)
+//       });
+// })
 
 app.post("/register-page", (req, res) => {
     firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
@@ -151,6 +189,35 @@ app.post("/createList", (req, res) => {
             res.json(list[0])
 
         })
+})
+
+app.post('/loadLists' , (req, res) =>{
+    const {boardId} = req.body;
+    db.select('*').from('lists')
+        .where('boardid', '=', boardId)
+        .then(lists => {
+            res.json(lists);
+        })
+        .catch(function (error) {
+            console.log(error)
+            res.status(500).json(error)
+        });
+
+})
+
+
+
+app.post('/loadCards', (req, res) =>{
+    const {listId} = req.body;
+    db.select('*').from('cards')
+        .where('listid', '=', listId)
+        .then(cards => {
+            res.json(cards);
+        })
+        .catch(function (error) {
+            console.log(error)
+            res.status(500).json(error)
+        });
 })
 
 
