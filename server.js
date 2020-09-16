@@ -122,6 +122,7 @@ app.use(
             const token = req.header('Authorization').replace('Bearer', '').trim()
             var user = firebase.auth().currentUser;
             if (user) {
+                // let checkRevoked = true;
                 admin.auth().verifyIdToken(token)
                     .then(function (decodedToken) {
                         if (decodedToken.uid === user.uid) {
@@ -129,10 +130,15 @@ app.use(
                             return next()
                         }
                     }).catch(function (error) {
-                        console.log(error)
-                        res.status(401).send("Unauthorized")
+                        // if (error.code == 'auth/id-token-revoked') {
+                        //     res.send( "Token has been revoked. Reauthenticate or signOut() the user.")
+                        //   } else {
+                        //     res.send("Token is invalid.")
+                        //   }
+                        res.status(500).json(error)
                     });
-            } else {
+            } 
+            else {
                 console.log("There is no current user.");
                 res.status(401).json()
             }
@@ -233,6 +239,33 @@ app.post("/createCard", (req, res) => {
             res.json(list[0])
 
         })
+})
+
+app.post('/loadCurrenteBoard', (req, res) =>{
+    const {boardId} =  req.body;
+    db.select('*').from('boards')
+        .where('boardid', '=', boardId)
+        .then(board => {
+            res.json(board[0]);
+        })
+        .catch(function (error) {
+            console.log(error)
+            res.status(500).json(error)
+        });
+})
+
+
+app.post('/loadCurrentBoardList', (req, res) =>{
+    const {boardId} =  req.body;
+    db.select('*').from('lists')
+        .where('boardid', '=', boardId)
+        .then(lists => {
+            res.json(lists);
+        })
+        .catch(function (error) {
+            console.log(error)
+            res.status(500).json(error)
+        });
 })
 
 app.listen(3001);
