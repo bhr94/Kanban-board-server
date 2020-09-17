@@ -17,12 +17,12 @@ var db = knex({
     client: 'pg',
     version: '7.2',
     connection: {
-
         host: '127.0.0.1',
         user: 'bahar',
         password: '',
         database: 'kanban_board'
-    }
+    },
+    useNullAsDefault: true
 });
 
 app.get('/landing-page', (req, res) => res.send("succes"))
@@ -255,18 +255,32 @@ app.post('/loadCurrenteBoard', (req, res) =>{
 })
 
 
-app.post('/loadCurrentBoardList', (req, res) =>{
-    const {boardId} =  req.body;
-    db.select('*').from('lists')
-        .where('boardid', '=', boardId)
-        .then(lists => {
-            res.json(lists);
-        })
-        .catch(function (error) {
-            console.log(error)
-            res.status(500).json(error)
-        });
-})
+    app.post('/loadCurrentBoardList', (req, res) =>{
+        const {boardId} =  req.body;
+        db.select('*').from('lists')
+            .where('boardid', '=', boardId)
+            .then(lists => {
+                res.json(lists);
+            })
+            .catch(function (error) {
+                console.log(error)
+                res.status(500).json(error)
+            });
+    })
+    
+    app.post('/updateBoardTitle', (req,res)=>{
+        const {boardId, newTitle} = req.body;
+        db('boards')
+        .returning("*")
+        .where({ boardid: boardId })
+        .update({ boardname: newTitle})
+        .then(board =>{
+                res.json(board[0])
+            })
+            .catch(error =>{
+                res.json(error)
+            })
+    })
 
 app.listen(3001);
 
