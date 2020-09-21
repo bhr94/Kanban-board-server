@@ -282,6 +282,21 @@ app.post('/loadCurrenteBoard', (req, res) =>{
             })
     })
 
+    app.post('/updateListTitle', (req,res) =>{
+        const {listId, newTitle} = req.body
+
+        db('lists')
+        .returning("*")
+        .where({ listid: listId })
+        .update({ listtitle: newTitle})
+        .then(list =>{
+                res.json(list[0])
+            })
+            .catch(error =>{
+                res.json(error)
+            })
+    })
+
 app.listen(3001);
 
 // 1. signin route ---> POST ==  success/fail  
