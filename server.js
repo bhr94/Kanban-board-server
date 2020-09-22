@@ -297,6 +297,22 @@ app.post('/loadCurrenteBoard', (req, res) =>{
             })
     })
 
+    app.post('/updateCardContent', (req,res)=>{
+        const {cardId, newCardContent} = req.body
+        db("cards")
+        .returning('*')
+        .where({cardid:cardId})
+        .update({cardcontent:newCardContent})
+        .then(card =>{
+            res.json(card[0])
+        })
+        .catch(error =>{
+            res.json(error)
+        })
+    })
+
+
+    
 app.listen(3001);
 
 // 1. signin route ---> POST ==  success/fail  
