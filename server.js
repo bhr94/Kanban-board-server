@@ -18,7 +18,7 @@ var db = knex({
     version: '7.2',
     connection: {
         host: '127.0.0.1',
-        user: 'bahar',
+        user: 'baharmutadayin',
         password: '',
         database: 'kanban_board'
     },
@@ -321,3 +321,6 @@ app.listen(3001);
 // 4. creareBoard route put
 // 5. createList route  put
 // 6. create card route put
+
+
+
