@@ -311,7 +311,27 @@ app.post('/loadCurrenteBoard', (req, res) =>{
         })
     })
 
+   app.post('/dragCard', (req,res)=>{
+       const{cardId, listId} = req.body
+       db('cards')
+       .returning("*")
+       .where({ cardid: cardId })
+       .update({ listid: listId})
+       .then(card =>{
+               res.json(card[0])
+           })
+           .catch(error =>{
+               res.json(error)
+           })
+   })
 
+   app.post('/deleteList', (req,res)=>{
+       const {lisId} = req.body;
+
+       db('lists')
+       .where({listid:listId})
+       .del()
+   })
     
 app.listen(3001);
 
