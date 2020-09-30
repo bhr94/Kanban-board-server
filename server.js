@@ -333,7 +333,7 @@ app.post('/loadCurrenteBoard', (req, res) =>{
        .del()
    })
     
-app.listen(3001);
+app.listen(process.env.PORT || 3001);
 
 // 1. signin route ---> POST ==  success/fail  
 // 2. register route ---> POST = user
