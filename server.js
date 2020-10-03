@@ -17,10 +17,8 @@ var db = knex({
     client: 'pg',
     version: '7.2',
     connection: {
-        host: 'postgresql-horizontal-71697',
-        user: 'baharmutadayin',
-        password: '',
-        database: 'kanban_board'
+        host: process.env.DATABASE_URL,
+        ssl:true,
     },
     useNullAsDefault: true
 });
