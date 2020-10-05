@@ -99,6 +99,9 @@ app.post("/register-page", (req, res) => {
                         res.json({ "user": user[0], "token": idToken })
 
                     })
+                    .catch(err=>{
+                        res.json(err)
+                    })
 
             })
                 .catch(error => {
