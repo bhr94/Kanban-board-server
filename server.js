@@ -11,8 +11,7 @@ const { firebase, admin, provider } = require("./fbConfig")
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var db = knex({
     client: 'pg',
     version: '7.2',
