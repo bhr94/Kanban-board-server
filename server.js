@@ -8,13 +8,14 @@ const saltRounds = 10;
 const { firebase, admin, provider } = require("./fbConfig")
 
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     cors()
     next();
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var db = knex({
