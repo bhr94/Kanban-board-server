@@ -16,6 +16,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.json({
+    type: ['application/json', 'text/plain']
+  }))
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
