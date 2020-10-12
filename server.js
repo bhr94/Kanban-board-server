@@ -1,20 +1,43 @@
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser');
+
 var cors = require('cors')
+
+app.use(cors()) // Use this after the variable declaration
+
+
+const bodyParser = require('body-parser');
 var knex = require('knex')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { firebase, admin, provider } = require("./fbConfig")
 
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
-    res.header('Access-Control-Allow-Methods', 'POST');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    cors()
-    next();
-});
+
+// Cross domain setting
+// var whiteList = {
+//     "http://localhost:3000": true,
+//     "https://example-url.herokuapp.com": true
+// };
+// var allowCrossDomain = function(req, res, next) {    
+//         if(whiteList[req.headers.origin]){            
+//             res.header('Access-Control-Allow-Credentials', true);
+//             res.header('Access-Control-Allow-Origin', req.headers.origin);
+//             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//             res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Origin, Accept');        
+//             next();
+//         } 
+// };
+// app.use(allowCrossDomain);
+
+// 
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
+//     res.header('Access-Control-Allow-Methods', 'POST');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     cors()
+//     next();
+// });
 
 app.use(express.json({
     type: ['application/json', 'text/plain']
@@ -26,7 +49,6 @@ app.use(bodyParser.json());
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var db = knex({
     client: 'pg',
-    version: '7.2',
     connection: {
         connectionString: process.env.DATABASE_URL,
         ssl:true,
